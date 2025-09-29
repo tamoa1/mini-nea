@@ -1,5 +1,15 @@
 {
-  "students": [
+    "tripDetails": {
+        "destination": "Yellowstone National Park",
+        "departureDate": "2024-07-15",
+        "returnDate": "2024-07-20",
+        "cost": 500,
+        "maxStudents": 30
+    },
+    "teachers": [
+        
+    ],
+    "students": [
     {
       "firstName": "John",
       "lastName": "Doe",

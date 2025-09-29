@@ -1,8 +1,7 @@
 import os
 
-helo
 
-def register_user(file):
+def register_user_to_trip(file):
     register = open(file + ".txt", "a")
     fName, lName = input("Enter your  name: ").split()
     register.write(f"{fName.lower()},{lName.lower()},{0} \n")
@@ -94,3 +93,15 @@ def assign_trip(arrgroups, arrrteachers):
 #arrgroups = ["group1", "group2"]
 #arrrteachers = ["teacher1", "teacher2"]
 #assign_trip(arrgroups, arrrteachers)
+
+
+def register_user(file):
+    f = open(file + ".txt", "w")
+    for row in f:
+        line = f.readline()
+        present = input(f"is {line[0]}{line[1]} present? (1/0): ")
+        if present == "1":
+            line = f.writelines(line[0], line[1], 1)
+
+
+register_user("trip1") #ts pmo does not work yet

@@ -1,0 +1,23 @@
+{
+  "students": [
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "present": true,
+      "date of Birth": "2005-06-15",
+      "address": {
+        "street": "123 Maple Street",
+        "city": "Springfield",
+        "zip": "62704"
+      },
+      "emergencyContact": {
+        "name": "Jane Doe",
+        "relationship": "Mother",
+        "phone": "555-123-4567"
+      }
+    }
+
+      
+    
+  ]
+}

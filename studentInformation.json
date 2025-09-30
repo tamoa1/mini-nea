@@ -9,7 +9,8 @@
             "zip": "62704"
         },
         "emergencyContact": {
-            "name": "Jane Doe",
+            "firstName": "Jane",
+            "lastName": "Doe",
             "relationship": "Mother",
             "phone": "555-123-4567"
         }
@@ -24,7 +25,8 @@
             "zip": "29601"
         },
         "emergencyContact": {
-            "name": "Michael Clark",
+            "firstName": "Michael",
+            "lastName": "Clark",
             "relationship": "Father",
             "phone": "555-987-6543"
         }

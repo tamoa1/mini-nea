@@ -1,14 +1,29 @@
 import os
+import json
 
 
-def register_user_to_trip(file):
-    register = open(file + ".txt", "a")
-    fName, lName = input("Enter your  name: ").split()
-    register.write(f"{fName.lower()},{lName.lower()},{0} \n")
-    register.close()
-    print("Registration successful!")
+def assign_student_to_trip(file, fName, lName):
+    #register = open(file + ".json", "a")
+    found = False
+    with open(file + ".json", "r") as f:
+        data = json.load(f)
+        for student in data["students"]:
+            if student["firstName"].lower() == fName.lower() and student["lastName"].lower() == lName.lower():
+                print(f"Student {fName} {lName} is already registered.")
+                found = True
+                break
+        if found == False:
+            data["students"].append({"firstName": fName, "lastName": lName, "present": False})
+            with open(file + ".json", 'w') as f:
+                json.dump(data, f, indent=4) 
+            print(f"Student {fName} {lName} has been registered successfully.")
+                      
 
-#register_user("trip1")
+    #register.write(f"{fName.lower()},{lName.lower()},{0} \n")
+   # register.close()
+    #print("Registration successful!")
+
+assign_student_to_trip("trip1", "Toma", "Croome")
 
 
 

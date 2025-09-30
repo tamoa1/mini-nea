@@ -1,0 +1,32 @@
+[
+    {
+        "firstName": "John",
+        "lastName": "Doe",
+        "date of Birth": "2005-06-15",
+        "address": {
+            "street": "123 Maple Street",
+            "city": "Springfield",
+            "zip": "62704"
+        },
+        "emergencyContact": {
+            "name": "Jane Doe",
+            "relationship": "Mother",
+            "phone": "555-123-4567"
+        }
+    },
+    {
+        "firstName": "Emily",
+        "lastName": "Clark",
+        "date of Birth": "2006-09-22",
+        "address": {
+            "street": "456 Oak Avenue",
+            "city": "Greenville",
+            "zip": "29601"
+        },
+        "emergencyContact": {
+            "name": "Michael Clark",
+            "relationship": "Father",
+            "phone": "555-987-6543"
+        }
+    }
+]

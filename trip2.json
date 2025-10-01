@@ -1,0 +1,23 @@
+{
+    "tripDetails": {
+        "destination": "london",
+        "departureDate": "",
+        "returnDate": "",
+        "cost": "",
+        "maxStudents": ""
+    },
+    "teachers": [
+        {
+            "firstName": "",
+            "lastName": "",
+            "userName": ""
+        }
+    ],
+    "students": [
+        {
+            "firstName": "",
+            "lastName": "",
+            "present": false
+        }
+    ]
+}

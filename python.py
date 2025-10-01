@@ -23,19 +23,24 @@ def assign_student_to_trip(file, fName, lName):
    # register.close()
     #print("Registration successful!")
 
-assign_student_to_trip("trip1", "Toma", "Croome")
+#assign_student_to_trip("trip1", "Toma", "Croome")
 
 
 
 
 def authentication():
-    global userName, password
+    global userName, password, switchAdmin
     userName = input("Enter your username: ")
     password = input("Enter your password: ")
-    for line in open("authorisedUsers.txt", "r").readlines():
-        storedName, storedPass = line.strip().split(",")
-        if userName == storedName and password == storedPass:
+    with open("authorisedUsers.json", "r") as f:
+        users = json.load(f)
+    for user in users:
+        if userName == user["userName"] and password == user["password"]:
             print("Login successful!")
+            if user["isAdmin"] == True:
+                switchAdmin = True
+            else:
+                switchAdmin = False
             return True
     print("Login failed!")
     return False
@@ -47,32 +52,47 @@ def authentication():
 def signUp():
     userName = input("Enter your desired username: ")
     password = input("Enter your desired password: ")
-    with open("authorisedUsers.txt", "a") as file:
-        file.write(f"{userName},{password}\n")
+    fName = input("Enter your first name: ")
+    lName = input("Enter your last name: ")
+    with open("authorisedUsers.json", "r") as f:
+        users = json.load(f)
+        users.append({"userName": userName, "password": password, "firstName": fName, "lastName": lName, "isAdmin": False})
+        with open("authorisedUsers.json", 'w') as f:
+            json.dump(users, f, indent=4)
     print("Sign-up successful!")
 
-#signUp()
-#authentication()
-
-#print(userName + password)
 
 
-def create_trip(filenum):
-    trip = open("trip" + str(filenum + 1) + ".txt", "w")
+
+def create_trip():
+    files = [f for f in os.listdir() if os.path.isfile(f)]
+    usedFileNum = []
+    for file in files:
+        if file.startswith("trip") and file.endswith(".json"):
+            usedFileNum += file[4:-5]
+    n = 1
+    while str(n) in usedFileNum:
+        n += 1
+    filenum = n - 1
+    trip = open("trip" + str(filenum + 1) + ".json", "w")
     tripName = input("Enter the name of the trip: ")
-    trip.write(tripName + "\n")
+    format = {"tripDetails": {"destination": tripName, "departureDate": "", "returnDate": "", "cost": "", "maxStudents":""}, "teachers": [{"firstName": "", "lastName": "", "userName":""}], "students": [{"firstName": "", "lastName": "", "present": False}]}
+    trip.write(json.dumps(format, indent=4))
     trip.close()
     print("Trip created successfully!")
 
 
+
 def find_trip_file(tripChoice):
     for filename in os.listdir():
-        if filename.endswith('.txt'):
+        if filename.endswith('.json') and filename.startswith('trip'):
             f = open(filename, 'r')
-            first_line = f.readline().strip().lower()
-            if first_line == tripChoice.lower():
+            data = json.load(f)
+            destination = data["tripDetails"]["destination"].lower()
+            if destination == tripChoice.lower():
                 return filename
     return None
+
 
 
 def assign_trip(arrgroups, arrrteachers):
@@ -101,8 +121,7 @@ def assign_trip(arrgroups, arrrteachers):
         print(f"Trip '{tripChoice}' not found in any file.")
 
 
-#num_of_concurrent_trips = 0
-#create_trip(num_of_concurrent_trips)
+
 
 
 #arrgroups = ["group1", "group2"]

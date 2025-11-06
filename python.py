@@ -1,5 +1,9 @@
+import streamlit as st
+import pandas as pd
 import os
 import json
+
+
 
 
 def assign_student_to_trip(file, fName, lName):
@@ -95,47 +99,89 @@ def find_trip_file(tripChoice):
 
 
 
-def assign_trip(arrgroups, arrrteachers):
-    groups = ""
-    teachers = ""
+def assign_trip_group(tripChoice, arrgroups):
+    tripFile = find_trip_file(tripChoice)
 
-    for group in arrgroups:
-        groups += group + ","
-       # groups = groups[:-1]
+    if tripFile is None:
+        print("Trip not found.")
+        return
+    
+    with open("studentInformation.json", "r") as f:
+        studentsData = json.load(f)
 
-    for teacher in arrrteachers:
-        teachers += teacher + ","
-      #  teachers = teachers[:-1]
+    with open(tripFile, "r") as f:
+        tripData = json.load(f)
 
-    tripChoice = input("Enter the trip name: ").lower()
-    found_file = find_trip_file(tripChoice)
-    if found_file != None:
-        print(f"Trip '{tripChoice}' found in file: {found_file}")
-        f = open(found_file, 'r')
-        lines = f.readlines()
-        lines.insert(1, str(groups) + '\n')
-        lines.insert(2, str(teachers) + '\n')
-        with open(found_file, 'w') as f:
-            f.writelines(lines)
-    else:
-        print(f"Trip '{tripChoice}' not found in any file.")
+    for student in studentsData["students"]:
+        if any(group in arrgroups for group in student["groups"]["classes"]) or student["groups"]["form"] in arrgroups:
+            tripData["students"].append({"firstName": student["firstName"], "lastName": student["lastName"], "present": False})
+
+    with open(tripFile, 'w') as f:
+        json.dump(tripData, f, indent=4)
+    print("groups assigned successfully!")
 
 
+def assign_trip_teachers(tripChoice, arrrteachers):
+    tripFile = find_trip_file(tripChoice)
+
+    if tripFile is None:
+        print("Trip not found.")
+        return
+
+    with open(tripFile, "r") as f:
+        tripData = json.load(f)
+
+    with open("authorisedUsers.json", "r") as f:
+        teacherFile = json.load(f)
+        for teacher in teacherFile:
+            if teacher["isAdmin"] == True and (teacher["firstName"] in arrrteachers or teacher["lastName"] in arrrteachers or teacher["userName"] in arrrteachers):
+                tripData["teachers"].append({"firstName": teacher["firstName"], "lastName": teacher["lastName"], "userName": teacher["userName"]})
+    with open(tripFile, 'w') as f:
+        json.dump(tripData, f, indent=4)
+    print("Teachers assigned successfully!")
+
+
+def assign_trip_students(tripChoice, arrstudents):
+    tripFile = find_trip_file(tripChoice)
+
+    if tripFile is None:
+        print("Trip not found.")
+        return
+    
+    with open("studentInformation.json", "r") as f:
+        studentsData = json.load(f)
+
+    with open(tripFile, "r") as f:
+        tripData = json.load(f)
+
+    for student in studentsData["students"]:
+        if student["firstName"] in arrstudents or student["lastName"] in arrstudents:
+            tripData["students"].append({"firstName": student["firstName"], "lastName": student["lastName"], "present": False})
+
+    with open(tripFile, 'w') as f:
+        json.dump(tripData, f, indent=4)
+    print("Students assigned successfully!")
 
 
 
-#arrgroups = ["group1", "group2"]
-#arrrteachers = ["teacher1", "teacher2"]
-#assign_trip(arrgroups, arrrteachers)
+arrgroups = ["LE1", "MfOW"]
+arrrteachers = ["Linda", "tamoa"]
+arrstudents = ["Toma", "Emily"]
+
+assign_student_to_trip("London", arrstudents) #need to fix and make all assign functions to check if already assigned
 
 
 def register_user(file):
-    f = open(file + ".txt", "w")
-    for row in f:
-        line = f.readline()
-        present = input(f"is {line[0]}{line[1]} present? (1/0): ")
-        if present == "1":
-            line = f.writelines(line[0], line[1], 1)
+    with open(file + ".json", "r") as f:
+        data = json.load(f)
+    for student in data["students"]:
+        if input(f"is {student['firstName']} {student['lastName']} present? (1/0): ") == "1":
+            student["present"] = True
+        else:
+            student["present"] = False
+    with open(file + ".json", 'w') as f:
+        json.dump(data, f, indent=4)
 
 
-register_user("trip1") #ts pmo does not work yet
+
+    

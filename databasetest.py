@@ -5,7 +5,7 @@ import mysql.connector
 #creating class for the database allows for neater code because all the code related to opening and closing the database is in one place.
 #works better than functions beacause for functions i would have to open and close the database connection each time.
 
-class tripDataBase:
+class dataBase:
     def __init__(self):
         self.db = mysql.connector.connect(
             host="127.0.0.1",
